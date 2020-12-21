@@ -117,7 +117,7 @@ public abstract class AbstractServer extends AbstractEndpoint implements Server 
             return;
         }
         try {
-            // 重置accepts的值
+            // 重置accepts的值,最大可连接的客户端数量
             if (url.hasParameter(Constants.ACCEPTS_KEY)) {
                 int a = url.getParameter(Constants.ACCEPTS_KEY, 0);
                 if (a > 0) {
@@ -128,7 +128,7 @@ public abstract class AbstractServer extends AbstractEndpoint implements Server 
             logger.error(t.getMessage(), t);
         }
         try {
-            // 重置idle.timeout的值
+            // 重置idle.timeout的值,空闲超时时间
             if (url.hasParameter(Constants.IDLE_TIMEOUT_KEY)) {
                 int t = url.getParameter(Constants.IDLE_TIMEOUT_KEY, 0);
                 if (t > 0) {

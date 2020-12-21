@@ -25,6 +25,9 @@ import com.alibaba.dubbo.remoting.RemotingException;
 
 /**
  * AbstractPeer
+ *
+ * 对该类还有点糊涂的朋友，记住在ChannelHandler接口，该类就做了装饰模式中装饰角色，在Endpoint接口，只是维护了通道的正在关闭和关闭完成两个状态。
+ *
  */
 public abstract class AbstractPeer implements Endpoint, ChannelHandler {
 

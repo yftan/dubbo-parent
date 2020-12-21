@@ -72,6 +72,7 @@ public abstract class AbstractEndpoint extends AbstractPeer implements Resetable
         if (ExtensionLoader.getExtensionLoader(Codec2.class).hasExtension(codecName)) {
             return ExtensionLoader.getExtensionLoader(Codec2.class).getExtension(codecName);
         } else {
+            // 这个是Codec 与 Codec2兼容的适配器类
             return new CodecAdapter(ExtensionLoader.getExtensionLoader(Codec.class)
                     .getExtension(codecName));
         }

@@ -149,7 +149,7 @@ public abstract class AbstractClient extends AbstractEndpoint implements Client 
         // 从缓存中获得线程池
         executor = (ExecutorService) ExtensionLoader.getExtensionLoader(DataStore.class)
                 .getDefaultExtension().get(Constants.CONSUMER_SIDE, Integer.toString(url.getPort()));
-        // 清楚线程池缓存
+        // 清除线程池缓存
         ExtensionLoader.getExtensionLoader(DataStore.class)
                 .getDefaultExtension().remove(Constants.CONSUMER_SIDE, Integer.toString(url.getPort()));
     }
