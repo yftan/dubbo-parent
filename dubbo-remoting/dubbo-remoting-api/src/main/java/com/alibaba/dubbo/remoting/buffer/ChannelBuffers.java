@@ -95,7 +95,7 @@ public final class ChannelBuffers {
     }
 
     /**
-     * 通过buffer来创建一个新的缓冲区
+     * 通过buffer来创建一个新的缓冲区，其实就是剩余空间的利用，如果有就复用
      * @param buffer
      * @return
      */

@@ -200,6 +200,7 @@ import java.nio.ByteBuffer;
  * ChannelBufferOutputStream}.
  *
  *
+ * 该接口的方法定义和设计跟Netty ByteBuf几乎一样，连注释都一样。
  */
 public interface ChannelBuffer extends Comparable<ChannelBuffer> {
 

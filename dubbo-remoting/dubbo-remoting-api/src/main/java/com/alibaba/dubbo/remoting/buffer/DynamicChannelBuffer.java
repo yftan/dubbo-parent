@@ -22,6 +22,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
+/**
+ * 根据传入的长度，使用HeapChannelBufferFactory工程动态生成ChannelBuffer
+ *
+ */
 public class DynamicChannelBuffer extends AbstractChannelBuffer {
 
     /**
@@ -60,11 +64,12 @@ public class DynamicChannelBuffer extends AbstractChannelBuffer {
      */
     @Override
     public void ensureWritableBytes(int minWritableBytes) {
-        // 如果最小写入的字节数不大于可写的字节数，则结束
+        // 如果最小写入的字节数不大于可写的字节数，则结束。证明还有空间进行写入
         if (minWritableBytes <= writableBytes()) {
             return;
         }
 
+        // 如果要写入的字节数，大于剩余的容量，则需要进行扩容
         // 新增容量
         int newCapacity;
         // 此缓冲区可包含的字节数等于0。

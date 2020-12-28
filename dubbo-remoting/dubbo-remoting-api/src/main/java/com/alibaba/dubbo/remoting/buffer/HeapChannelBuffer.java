@@ -25,6 +25,10 @@ import java.nio.channels.ClosedChannelException;
 import java.nio.channels.GatheringByteChannel;
 import java.nio.channels.ScatteringByteChannel;
 
+/**
+ * 该方法继承了AbstractChannelBuffer，该类中buffer是基于字节数组实现
+ *
+ */
 public class HeapChannelBuffer extends AbstractChannelBuffer {
 
     /**
