@@ -112,12 +112,9 @@ public class HeaderExchangeServer implements ExchangeServer {
         // 遍历所有连接该服务器的通道
         for (Channel channel : channels) {
 
-            /**
-             *  If there are any client connections,
-             *  our server should be running.
-             */
 
             // 只要有任何一个客户端连接，则服务器还运行着
+            // 这个是检查Server是否正常运行，其中有一个channel链接就可以证明服务器运行正常
             if (channel.isConnected()) {
                 return true;
             }
@@ -315,7 +312,8 @@ public class HeaderExchangeServer implements ExchangeServer {
                     new HeartBeatTask(new HeartBeatTask.ChannelProvider() {
                         @Override
                         public Collection<Channel> getChannels() {
-                            // 返回一个不可修改的连接该服务器的信息交换通道集合
+                            // HeaderExchangeClient返回一个只包含HeaderExchangeClient对象的不可变列表
+                            // HeaderExchangeServer 返回一个不可修改的连接该服务器的信息交换通道集合，因为Server与Channel是一对多的关系
                             return Collections.unmodifiableCollection(
                                     HeaderExchangeServer.this.getChannels());
                         }

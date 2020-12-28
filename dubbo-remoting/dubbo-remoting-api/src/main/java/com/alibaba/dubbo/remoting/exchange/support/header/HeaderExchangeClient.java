@@ -49,11 +49,11 @@ public class HeaderExchangeClient implements ExchangeClient {
      */
     private static final ScheduledThreadPoolExecutor scheduled = new ScheduledThreadPoolExecutor(2, new NamedThreadFactory("dubbo-remoting-client-heartbeat", true));
     /**
-     * 客户端
+     * 客户端（这个类是Client和Channel的适配器，所以声明类这两个变量）
      */
     private final Client client;
     /**
-     * 信息交换通道
+     * 信息交换通道（这个类是Client和Channel的适配器，所以声明类这两个变量）
      */
     private final ExchangeChannel channel;
     // heartbeat timer
@@ -218,7 +218,8 @@ public class HeaderExchangeClient implements ExchangeClient {
                     new HeartBeatTask(new HeartBeatTask.ChannelProvider() {
                         @Override
                         public Collection<Channel> getChannels() {
-                            // 返回一个只包含HeaderExchangeClient对象的不可变列表
+                            // HeaderExchangeClient返回一个只包含HeaderExchangeClient对象的不可变列表
+                            // HeaderExchangeServer 返回一个不可修改的连接该服务器的信息交换通道集合，因为Server与Channel是一对多的关系
                             return Collections.<Channel>singletonList(HeaderExchangeClient.this);
                         }
                     }, heartbeat, heartbeatTimeout),

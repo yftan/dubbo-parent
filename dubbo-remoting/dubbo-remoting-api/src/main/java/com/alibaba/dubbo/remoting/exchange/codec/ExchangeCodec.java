@@ -141,7 +141,7 @@ public class ExchangeCodec extends TelnetCodec {
             return DecodeResult.NEED_MORE_INPUT;
         }
 
-        // get data length.
+        // 获取数据域的长度
         int len = Bytes.bytes2int(header, 12);
         // 检查信息头长度
         checkPayload(channel, len);
@@ -275,12 +275,12 @@ public class ExchangeCodec extends TelnetCodec {
         Bytes.short2bytes(MAGIC, header);
 
         // set request and serialization flag.
-        // 16-23位为serialization编号，用到或运算10000000|serialization编号，例如serialization编号为11111，则为00011111
+        // 16-23位为serialization编号，用到或运算10000000|serialization编号，例如serialization编号为11111，则为10011111
         header[2] = (byte) (FLAG_REQUEST | serialization.getContentTypeId());
 
-        // 继续上面的例子，00011111|1000000 = 01011111
+        // 继续上面的例子，10011111|1000000 = 11011111
         if (req.isTwoWay()) header[2] |= FLAG_TWOWAY;
-        // 继续上面的例子，01011111|100000 = 011 11111 可以看到011代表请求标记、双向、是事件，这样就设置了16、17、18位，后面19-23位是Serialization 编号
+        // 继续上面的例子，11011111|100000 = 111 11111 可以看到111代表请求标记、双向、是事件，这样就设置了16、17、18位，后面19-23位是Serialization 编号
         if (req.isEvent()) header[2] |= FLAG_EVENT;
 
         // set request id.
@@ -319,6 +319,7 @@ public class ExchangeCodec extends TelnetCodec {
         // 把header写入到buffer
         buffer.writerIndex(savedWriteIndex);
         buffer.writeBytes(header); // write header.
+        // 因为body在上面已经写入buffer了，把write的索引移动到对应到位置即可
         buffer.writerIndex(savedWriteIndex + HEADER_LENGTH + len);
     }
 
@@ -342,7 +343,7 @@ public class ExchangeCodec extends TelnetCodec {
             byte status = res.getStatus();
             header[3] = status;
             // set request id.
-            // 设置32-95位为请求id
+            // 设置32-95位为请求id，偏移4个字节，从第32位开始
             Bytes.long2bytes(res.getId(), header, 4);
 
             // 写入数据

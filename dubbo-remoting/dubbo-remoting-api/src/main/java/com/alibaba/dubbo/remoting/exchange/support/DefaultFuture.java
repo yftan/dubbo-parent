@@ -44,12 +44,12 @@ public class DefaultFuture implements ResponseFuture {
     private static final Logger logger = LoggerFactory.getLogger(DefaultFuture.class);
 
     /**
-     * 通道集合
+     * 通道集合，key为请求编号即属性id
      */
     private static final Map<Long, Channel> CHANNELS = new ConcurrentHashMap<Long, Channel>();
 
     /**
-     * Future集合，key为请求编号
+     * Future集合，key为请求编号即属性id
      */
     private static final Map<Long, DefaultFuture> FUTURES = new ConcurrentHashMap<Long, DefaultFuture>();
 
@@ -163,7 +163,9 @@ public class DefaultFuture implements ResponseFuture {
     }
 
     /**
-     * 接收响应
+     * 接收响应，并关闭通道（用于超时关闭通道，或关闭通道的操作，一般response都是错误信息，
+     * 所以通道直接关掉就行了。如果是正常的，就不应该关闭，继续保持）
+     *
      * @param channel
      * @param response
      */
@@ -274,7 +276,9 @@ public class DefaultFuture implements ResponseFuture {
     }
 
     /**
-     * 执行回调
+     * 执行回调，这个函数是异步的，当请求完成后会自动执行该方法。
+     * 还有一个returnFromResponse是使用了get()阻塞获得结果是同步的
+     *
      * @param c
      */
     private void invokeCallback(ResponseCallback c) {
@@ -318,6 +322,9 @@ public class DefaultFuture implements ResponseFuture {
 
     /**
      * 返回响应
+     * returnFromResponse是使用了get()阻塞获得结果是同步的
+     * invokeCallback函数是异步的，当请求完成后会自动执行该方法。
+     *
      * @return
      * @throws RemotingException
      */
@@ -378,6 +385,7 @@ public class DefaultFuture implements ResponseFuture {
             response = res;
             if (done != null) {
                 // 唤醒等待
+                // 可以看到，由于是异步的发出请求后，线程挂起。当接收到响应后，会把等待的线程唤醒，然后执行回调来处理该响应结果。
                 done.signal();
             }
         } finally {
